@@ -1,0 +1,17 @@
+digraph A {
+A -> B [label="1"]
+A -> E [label="2"]
+A -> G [label="3"]
+B -> C [label="5"]
+B -> F [label="2"]
+B -> H [label="5"]
+G -> H [label="7"]
+C -> D [label="3"]
+F -> D [label="6"]
+H -> D [label="9"]
+A [style=bold];
+H [style=bold];
+}
+
+// dot graph.dot -o graph.png -Tpng -Grankdir=LR
+// A	B	C	D	F	H	E	G
