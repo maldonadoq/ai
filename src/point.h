@@ -2,11 +2,13 @@
 #define _POINT_H_
 
 #include <iostream>
+#include <math.h>
 
 template<class G>
 class cpoint{
 private:
 	typedef typename G::T 		T;
+	typedef typename G::W 		W;
 	typedef typename G::point	point;
 	T x, y;
 public:
@@ -31,6 +33,10 @@ public:
 
 	void set_x(T _x){	this->x = _x;	}
 	void set_y(T _y){	this->y = _y;	}
+
+	W distance(point t){
+		return (W)(sqrt(pow(x-t.get_x(),2) + pow(y-t.get_y(),2)));
+	}
 };
 
 #endif

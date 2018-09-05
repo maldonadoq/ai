@@ -1,8 +1,6 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
-#include <math.h>
-
 template<class G>
 class cnode{
 private:
@@ -69,8 +67,8 @@ public:
 	}
 
 	W distance(node *t){
-		return (W)(sqrt(pow(m_data.get_x()-t->m_data.get_x(),2) + 
-			pow(m_data.get_y()-t->m_data.get_y(),2)));
+		return this->m_data.distance(t->m_data);
+		 //(W)(sqrt(pow(m_data.get_x()-t->m_data.get_x(),2) + pow(m_data.get_y()-t->m_data.get_y(),2)));
 	}
 
 	void set_heuristic(node *t){
