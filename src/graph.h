@@ -18,6 +18,7 @@ class cgraph{
 private:
 	typedef typename G::node	node;	// class node
     typedef typename G::point	point;	// class point
+    typedef typename G::W 		W;
 
 	unsigned m_srow, m_scol;	// size in pixel of row and col
 	unsigned m_nrow, m_ncol;	// number of row and col of regular matrix
@@ -142,28 +143,29 @@ public:
 	void a_asterisk(node *s, node *t){
 		typename std::list<node *>::iterator it;
 		for(it=s->m_lady.begin(); it!=s->m_lady.end(); it++){
-			std::cout << (*it)->get_heuristic() << "\t";
+			std::cout << (*it)->m_data << "\t";
 		}
 		std::cout << "\n";
-
-		for(it=t->m_lady.begin(); it!=t->m_lady.end(); it++){
-			std::cout << (*it)->get_heuristic() << "\t";
-		}
-		std::cout << "\n";
-	}
-
-	void search(point ps, point pt, unsigned t){
-		node *ns, *nt;
-		ns = find_node(ps);
-		nt = find_node(pt);
-		if(ns!=NULL and nt!=NULL){
-			restart_target(nt);
-			switch(t){
-				case 6: a_asterisk(ns,nt);
-					break;			
-			}
-		}	
 	}	
+
+	node* near_to(point a){
+		node* tmp = NULL;
+		W min_dist = 100000;
+		W tdist;
+		for(unsigned i=0; i<this->m_nrow; i++){
+			for(unsigned j=0; j<this->m_ncol; j++){				
+				if(this->m_vnodes[i][j] != NULL){
+					tdist = this->m_vnodes[i][j]->m_data.distance(a);
+					if(tdist < min_dist){						
+						tmp = this->m_vnodes[i][j];
+						min_dist = tdist;
+					}
+				}
+			}
+		}
+		
+		return tmp;
+	}
 
 	~cgraph(){
 		for(unsigned i=0; i<this->m_nrow; i++){
