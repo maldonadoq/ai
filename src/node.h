@@ -16,12 +16,6 @@ public:
 	std::list<node * > m_lady;	// ady's list
 	point m_data;				// data node (point)
 	bool m_state;
-	unsigned m_id;
-	
-	cnode(point _data, unsigned _id){			// constructor with data
-		this->m_data = _data;
-		this->m_id = _id;
-	}
 
 	cnode(point _data){	this->m_data = _data;	}
 

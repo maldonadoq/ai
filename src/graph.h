@@ -57,7 +57,7 @@ public:
 		unsigned i,j,k=0;
 		for(i=0; i<this->m_nrow; i++){
 			for(j=0; j<this->m_ncol; j++){
-				this->m_vnodes[i][j] = new node(point(this->m_unit*j, this->m_unit*i), k++);
+				this->m_vnodes[i][j] = new node(point(this->m_unit*j, this->m_unit*i));
 			}
 		}
 	}
@@ -154,9 +154,7 @@ public:
 		}
 	}
 
-	void restart_path(std::vector<std::pair<double, double> > &pt, point **cf, point src, point tar){				
-		pt.clear();
-		
+	void restart_path(std::vector<std::pair<double, double> > &pt, point **cf, point src, point tar){								
 		bool t = true;
 		unsigned tx,ty;
 		point current = tar;
@@ -174,7 +172,8 @@ public:
 	}
 
 	void a_asterisk(node *s, node *t){
-		restart_target();		
+		restart_target();
+		vpatha.clear();
 
 		typename std::list<node *>::iterator it;
 		std::priority_queue<node *, std::vector<node *>, compare<node *> > pq;		
@@ -220,6 +219,7 @@ public:
 
 	void depth_search(node* s, node* t){
 		restart_target();
+		vpathd.clear();
 
 		std::stack<node *> v;
 		v.push(s);
@@ -257,6 +257,7 @@ public:
 
 	void breadth_search(node* s, node* t){
 		restart_target();
+		vpathb.clear();
 
 		std::queue<node *> v;
 		v.push(s);

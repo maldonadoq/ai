@@ -9,6 +9,9 @@
 #define KEY_S 's'       // get node source
 #define KEY_T 't'       // get node target
 #define KEY_A 'a'
+#define KEY_D 'd'
+#define KEY_B 'b'
+#define KEY_C 'c'
 
 #include "src/graph.h"
 
@@ -21,9 +24,9 @@ graph *tmp;								// graph
 
 double row_size = 500;					// screen row size
 double col_size = 1000;					// screen col size
-double unit_size = 10;					// unit min
+double unit_size = 25;					// unit min
 
-double ts = 10;
+double ts = 20;
 
 point pmin(0-ts,-ts);					// min point 
 point pmax(col_size+ts,row_size+ts);	// max point
@@ -40,6 +43,9 @@ bool state_resize = true;
 
 bool state_source = false;
 bool state_target = false;
+bool state_patha = false;
+bool state_pathd = false;
+bool state_pathb = false;
 
 void gldraw(){
 	if(state_vertex){
@@ -77,6 +83,42 @@ void gldraw(){
             glColor3d(255,255,0);
             glVertex2d(node_target->m_data.get_x(),
                 node_target->m_data.get_y());
+        glEnd();
+    }
+
+    // path asterisk a
+    if(state_patha){
+        glLineWidth(1);    
+        glBegin(GL_LINES);
+            for(unsigned i=0; i<vpatha.size()-1; i++){
+                glColor3d(0,255,255);
+                glVertex2d(vpatha[i].first,vpatha[i].second);
+                glVertex2d(vpatha[i+1].first,vpatha[i+1].second);
+            }       
+        glEnd();
+    }
+    
+    // path depth search
+    if(state_pathd){
+        glLineWidth(1);
+        glBegin(GL_LINES);
+            for(unsigned i=0; i<vpathd.size()-1; i++){
+                glColor3d(75,25,25);
+                glVertex2d(vpathd[i].first,vpathd[i].second);
+                glVertex2d(vpathd[i+1].first,vpathd[i+1].second);
+            }       
+        glEnd();
+    }
+
+    // path breadth search
+    if(state_pathb){
+        glLineWidth(1);
+        glBegin(GL_LINES);
+            for(unsigned i=0; i<vpathb.size()-1; i++){
+                glColor3d(255,0,255);
+                glVertex2d(vpathb[i].first,vpathb[i].second);
+                glVertex2d(vpathb[i+1].first,vpathb[i+1].second);
+            }       
         glEnd();
     }
 }
@@ -159,6 +201,20 @@ GLvoid window_key(unsigned char key, int x, int y) {
         }
         case KEY_A:
             tmp->a_asterisk(node_source, node_target);
+            state_patha = true;
+            break;
+        case KEY_D:
+            tmp->depth_search(node_source, node_target);
+            state_pathd = true;
+            break;
+        case KEY_B:
+            tmp->breadth_search(node_source, node_target);
+            state_pathb = true;
+            break;
+        case KEY_C:            
+            state_patha = !state_patha;
+            state_pathd = !state_pathd;
+            state_pathb = !state_pathb;
             break;
         default:
             break;
