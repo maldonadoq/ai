@@ -28,6 +28,10 @@ public:
        	return (a.get_x() == b.get_x()) and (a.get_y() == b.get_y());
    	}
 
+   	friend bool operator!=(point &a, point &b){
+       	return (a.get_x() != b.get_x()) or (a.get_y() != b.get_y());
+   	}
+
 	T get_x(){	return this->x;	}
 	T get_y(){	return this->y;	}
 

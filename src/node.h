@@ -1,6 +1,9 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
+static std::vector<std::pair<double, double> > vpoints;
+static std::vector<std::pair<double, double> > vlines;
+
 template<class G>
 class cnode{
 private:
@@ -8,15 +11,19 @@ private:
     typedef typename G::point	point;
     typedef typename G::H 		H;
     typedef typename G::W 		W;
-    H m_heuristic;    
+    H m_hg;
 public:
 	std::list<node * > m_lady;	// ady's list
 	point m_data;				// data node (point)
 	bool m_state;
+	unsigned m_id;
 	
-	cnode(point _data){			// constructor with data
+	cnode(point _data, unsigned _id){			// constructor with data
 		this->m_data = _data;
+		this->m_id = _id;
 	}
+
+	cnode(point _data){	this->m_data = _data;	}
 
 	cnode(){}
 
@@ -71,11 +78,11 @@ public:
 		 //(W)(sqrt(pow(m_data.get_x()-t->m_data.get_x(),2) + pow(m_data.get_y()-t->m_data.get_y(),2)));
 	}
 
-	void set_heuristic(node *t){
-		this->m_heuristic = distance(t);
+	void set_hg(H _hg){
+		this->m_hg = _hg;
 	}
 
-	H get_heuristic(){	return this->m_heuristic;	}
+	H get_hg(){	return this->m_hg;	}
 };
 
 #endif
