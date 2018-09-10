@@ -16,6 +16,8 @@ extern std::vector<std::pair<double, double> > vlines;
 static std::vector<std::pair<double, double> > vpatha;
 static std::vector<std::pair<double, double> > vpathd;
 static std::vector<std::pair<double, double> > vpathb;
+static std::vector<std::pair<double, double> > vpathh;
+static std::vector<std::pair<double, double> > vpathe;
 
 template<class T>
 class compare{
@@ -54,7 +56,7 @@ public:
 	cgraph(){}
 
 	void create_regular_vertex(){
-		unsigned i,j,k=0;
+		unsigned i,j;
 		for(i=0; i<this->m_nrow; i++){
 			for(j=0; j<this->m_ncol; j++){
 				this->m_vnodes[i][j] = new node(point(this->m_unit*j, this->m_unit*i));
@@ -154,8 +156,7 @@ public:
 		}
 	}
 
-	void restart_path(std::vector<std::pair<double, double> > &pt, point **cf, point src, point tar){								
-		bool t = true;
+	void restart_path(std::vector<std::pair<double, double> > &pt, point **cf, point src, point tar){
 		unsigned tx,ty;
 		point current = tar;
 
@@ -290,6 +291,92 @@ public:
 			}
 			v.pop();
 		}
+	}
+
+	void hill_climbing(node *s, node *t){
+		restart_target();
+		vpathh.clear();
+
+		typename std::list<node *>::iterator it;
+		std::priority_queue<node *, std::vector<node *>, compare<node *> > pq;		
+
+		pq.push(s);
+		node* current;
+
+		H h;
+
+		unsigned tx,ty, i;
+		point **camefrom = new point*[m_nrow];		
+		for(i=0; i<m_nrow; i++)	camefrom[i] = new point[m_ncol];
+
+		while(!pq.empty()){
+			current = pq.top();
+			pq.pop();
+		
+			if(current == t){
+				restart_path(vpathh, camefrom, s->m_data, t->m_data);
+				return;
+			}
+
+			for(it=current->m_lady.begin(); it!=current->m_lady.end(); it++){
+				if(!(*it)->m_state){
+					(*it)->m_state = true;
+					h = (*it)->distance(t);
+					(*it)->set_hg(h);
+					pq.push(*it);
+
+					tx = (*it)->m_data.get_x()/m_unit;
+					ty = (*it)->m_data.get_y()/m_unit;
+
+					camefrom[ty][tx] = point(current->m_data.get_x(), current->m_data.get_y());
+				}
+			}
+		}
+
+		delete []camefrom;
+	}
+
+	void first_better(node *s, node *t){
+		restart_target();
+		vpathe.clear();
+
+		typename std::list<node *>::iterator it;
+		std::priority_queue<node *, std::vector<node *>, compare<node *> > pq;		
+
+		pq.push(s);
+		node* current;
+
+		W g;
+
+		unsigned tx,ty, i;
+		point **camefrom = new point*[m_nrow];		
+		for(i=0; i<m_nrow; i++)	camefrom[i] = new point[m_ncol];
+
+		while(!pq.empty()){
+			current = pq.top();
+			pq.pop();
+		
+			if(current == t){
+				restart_path(vpathe, camefrom, s->m_data, t->m_data);
+				return;
+			}
+
+			for(it=current->m_lady.begin(); it!=current->m_lady.end(); it++){
+				if(!(*it)->m_state){
+					(*it)->m_state = true;
+					g = current->distance(*it);
+					(*it)->set_hg(g);
+					pq.push(*it);
+
+					tx = (*it)->m_data.get_x()/m_unit;
+					ty = (*it)->m_data.get_y()/m_unit;
+
+					camefrom[ty][tx] = point(current->m_data.get_x(), current->m_data.get_y());
+				}
+			}
+		}
+
+		delete []camefrom;
 	}
 
 	node* near_to(point a){

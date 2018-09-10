@@ -11,13 +11,15 @@
 #define KEY_A 'a'
 #define KEY_D 'd'
 #define KEY_B 'b'
+#define KEY_H 'h'
+#define KEY_F 'f'
 #define KEY_C 'c'
 
 #include "src/graph.h"
 
 typedef traits<float, double, double>	box;	// type box
 typedef cpoint<box>						point;	// point
-typedef cnode<box>                      node;  // point
+typedef cnode<box>                      node;   // point
 typedef cgraph<box>						graph;	// graph
 
 graph *tmp;								// graph
@@ -46,6 +48,8 @@ bool state_target = false;
 bool state_patha = false;
 bool state_pathd = false;
 bool state_pathb = false;
+bool state_pathh = false;
+bool state_pathe = false;
 
 void gldraw(){
 	if(state_vertex){
@@ -118,6 +122,28 @@ void gldraw(){
                 glColor3d(255,0,255);
                 glVertex2d(vpathb[i].first,vpathb[i].second);
                 glVertex2d(vpathb[i+1].first,vpathb[i+1].second);
+            }       
+        glEnd();
+    }
+
+    if(state_pathh){
+        glLineWidth(1);
+        glBegin(GL_LINES);
+            for(unsigned i=0; i<vpathh.size()-1; i++){
+                glColor3d(255,0,255);
+                glVertex2d(vpathh[i].first,vpathh[i].second);
+                glVertex2d(vpathh[i+1].first,vpathh[i+1].second);
+            }       
+        glEnd();
+    }
+
+    if(state_pathe){
+        glLineWidth(1);
+        glBegin(GL_LINES);
+            for(unsigned i=0; i<vpathe.size()-1; i++){
+                glColor3d(255,0,255);
+                glVertex2d(vpathe[i].first,vpathe[i].second);
+                glVertex2d(vpathe[i+1].first,vpathe[i+1].second);
             }       
         glEnd();
     }
@@ -211,10 +237,20 @@ GLvoid window_key(unsigned char key, int x, int y) {
             tmp->breadth_search(node_source, node_target);
             state_pathb = true;
             break;
+        case KEY_H:
+            tmp->hill_climbing(node_source, node_target);
+            state_pathh = true;
+            break;
+        case KEY_F:
+            tmp->first_better(node_source, node_target);
+            state_pathe = true;
+            break;
         case KEY_C:            
             state_patha = !state_patha;
             state_pathd = !state_pathd;
             state_pathb = !state_pathb;
+            state_pathh = !state_pathh;
+            state_pathe = !state_pathe;
             break;
         default:
             break;
