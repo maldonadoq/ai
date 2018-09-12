@@ -8,12 +8,13 @@
 #define KEY_R 'r'       // remove into 2 point
 #define KEY_S 's'       // get node source
 #define KEY_T 't'       // get node target
-#define KEY_A 'a'
-#define KEY_D 'd'
-#define KEY_B 'b'
-#define KEY_H 'h'
-#define KEY_F 'f'
-#define KEY_C 'c'
+#define KEY_A 'a'       // a_asterisk
+#define KEY_D 'd'       // depth_search
+#define KEY_B 'b'       // breadth_search
+#define KEY_H 'h'       // hill_climbing
+#define KEY_F 'f'       // first_better
+#define KEY_W 'w'       // blind_search
+#define KEY_C 'c'       // clear path's
 
 #include "src/graph.h"
 
@@ -26,7 +27,7 @@ graph *tmp;								// graph
 
 double row_size = 500;					// screen row size
 double col_size = 1000;					// screen col size
-double unit_size = 25;					// unit min
+double unit_size = 20;					// unit min
 
 double ts = 20;
 
@@ -40,26 +41,18 @@ node *node_source = new node(point(0,0));
 node *node_target = new node(point(0,0));
 
 bool state_edge = true;
-bool state_vertex = true;
 bool state_resize = true;
 
 bool state_source = false;
 bool state_target = false;
-bool state_patha = false;
-bool state_pathd = false;
-bool state_pathb = false;
-bool state_pathh = false;
-bool state_pathe = false;
 
 void gldraw(){
-	if(state_vertex){
-	    glPointSize(2);
-	    glBegin(GL_POINTS);
-	        glColor3d(255,0,0);
-	        for(unsigned i=0; i<vpoints.size(); i++)
-	            glVertex2d(vpoints[i].first,vpoints[i].second);
-	    glEnd();
-	}
+    glPointSize(2);
+    glBegin(GL_POINTS);
+        glColor3d(255,0,0);
+        for(unsigned i=0; i<vpoints.size(); i++)
+            glVertex2d(vpoints[i].first,vpoints[i].second);
+    glEnd();
 
 	if(state_edge){
 	    glLineWidth(1);    
@@ -91,62 +84,64 @@ void gldraw(){
     }
 
     // path asterisk a
-    if(state_patha){
-        glLineWidth(1);    
-        glBegin(GL_LINES);
-            for(unsigned i=0; i<vpatha.size()-1; i++){
-                glColor3d(0,255,255);
-                glVertex2d(vpatha[i].first,vpatha[i].second);
-                glVertex2d(vpatha[i+1].first,vpatha[i+1].second);
-            }       
-        glEnd();
-    }
+    glLineWidth(1);    
+    glBegin(GL_LINES);
+        for(unsigned i=0; i<vpatha.size()-1 and vpatha.size()>1; i++){
+            glColor3d(0,255,255);
+            glVertex2d(vpatha[i].first,vpatha[i].second);
+            glVertex2d(vpatha[i+1].first,vpatha[i+1].second);
+        }       
+    glEnd();
     
     // path depth search
-    if(state_pathd){
-        glLineWidth(1);
-        glBegin(GL_LINES);
-            for(unsigned i=0; i<vpathd.size()-1; i++){
-                glColor3d(75,25,25);
-                glVertex2d(vpathd[i].first,vpathd[i].second);
-                glVertex2d(vpathd[i+1].first,vpathd[i+1].second);
-            }       
-        glEnd();
-    }
+    glLineWidth(1);
+    glBegin(GL_LINES);
+        for(unsigned i=0; i<vpathd.size()-1 and vpathd.size()>1; i++){
+            glColor3d(75,25,25);
+            glVertex2d(vpathd[i].first,vpathd[i].second);
+            glVertex2d(vpathd[i+1].first,vpathd[i+1].second);
+        }       
+    glEnd();
 
     // path breadth search
-    if(state_pathb){
-        glLineWidth(1);
-        glBegin(GL_LINES);
-            for(unsigned i=0; i<vpathb.size()-1; i++){
-                glColor3d(255,0,255);
-                glVertex2d(vpathb[i].first,vpathb[i].second);
-                glVertex2d(vpathb[i+1].first,vpathb[i+1].second);
-            }       
-        glEnd();
-    }
+    glLineWidth(1);
+    glBegin(GL_LINES);
+        for(unsigned i=0; i<vpathb.size()-1 and vpathb.size()>1; i++){
+            glColor3d(255,0,255);
+            glVertex2d(vpathb[i].first,vpathb[i].second);
+            glVertex2d(vpathb[i+1].first,vpathb[i+1].second);
+        }       
+    glEnd();
 
-    if(state_pathh){
-        glLineWidth(1);
-        glBegin(GL_LINES);
-            for(unsigned i=0; i<vpathh.size()-1; i++){
-                glColor3d(255,0,255);
-                glVertex2d(vpathh[i].first,vpathh[i].second);
-                glVertex2d(vpathh[i+1].first,vpathh[i+1].second);
-            }       
-        glEnd();
-    }
+    // path hill climbing
+    glLineWidth(1);
+    glBegin(GL_LINES);
+        for(unsigned i=0; i<vpathh.size()-1 and vpathh.size()>1; i++){
+            glColor3d(9,0,0);
+            glVertex2d(vpathh[i].first,vpathh[i].second);
+            glVertex2d(vpathh[i+1].first,vpathh[i+1].second);
+        }       
+    glEnd();
 
-    if(state_pathe){
-        glLineWidth(1);
-        glBegin(GL_LINES);
-            for(unsigned i=0; i<vpathe.size()-1; i++){
-                glColor3d(255,0,255);
-                glVertex2d(vpathe[i].first,vpathe[i].second);
-                glVertex2d(vpathe[i+1].first,vpathe[i+1].second);
-            }       
-        glEnd();
-    }
+    // path first better
+    glLineWidth(1);
+    glBegin(GL_LINES);
+        for(unsigned i=0; i<vpathe.size()-1 and vpathe.size()>1; i++){
+            glColor3d(0,0,9);
+            glVertex2d(vpathe[i].first,vpathe[i].second);
+            glVertex2d(vpathe[i+1].first,vpathe[i+1].second);
+        }       
+    glEnd();
+
+    // path blind search
+    glLineWidth(1);
+    glBegin(GL_LINES);
+        for(unsigned i=0; i<vpathbl.size()-1 and vpathbl.size()>1; i++){
+            glColor3d(0,9,9);
+            glVertex2d(vpathbl[i].first,vpathbl[i].second);
+            glVertex2d(vpathbl[i+1].first,vpathbl[i+1].second);
+        }       
+    glEnd();
 }
 
 void glpaint(){
@@ -196,13 +191,9 @@ GLvoid window_key(unsigned char key, int x, int y) {
             exit(0);
             break;
         case KEY_E:
-        	if(state_edge){		state_edge = false;	state_vertex = true;	}
-        	else{	state_edge = true;	state_vertex = true;	}
-        	break;
-        case KEY_V:
-        	if(state_vertex){		state_vertex = false;	state_edge = true;	}
-        	else{	state_edge = true;	state_vertex = true;	}
-        	break;
+        	if(state_edge){		state_edge = false;   }
+        	else{	state_edge = true;   }
+        	break;        
         case KEY_R:        	
         	tmp->remove_node_in(minr, maxr);
         	// std::cout << minr << "\t" << maxr << "\n";
@@ -227,30 +218,29 @@ GLvoid window_key(unsigned char key, int x, int y) {
         }
         case KEY_A:
             tmp->a_asterisk(node_source, node_target);
-            state_patha = true;
             break;
         case KEY_D:
             tmp->depth_search(node_source, node_target);
-            state_pathd = true;
             break;
         case KEY_B:
             tmp->breadth_search(node_source, node_target);
-            state_pathb = true;
             break;
         case KEY_H:
             tmp->hill_climbing(node_source, node_target);
-            state_pathh = true;
             break;
         case KEY_F:
             tmp->first_better(node_source, node_target);
-            state_pathe = true;
+            break;
+        case KEY_W:
+            tmp->blind_search(node_source, node_target);
             break;
         case KEY_C:            
-            state_patha = !state_patha;
-            state_pathd = !state_pathd;
-            state_pathb = !state_pathb;
-            state_pathh = !state_pathh;
-            state_pathe = !state_pathe;
+            vpatha.clear();
+            vpathd.clear();
+            vpathb.clear();
+            vpathh.clear();
+            vpathe.clear();
+            vpathbl.clear();
             break;
         default:
             break;
