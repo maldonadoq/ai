@@ -331,7 +331,7 @@ void cgraph<G>::breadth_search(node* s, node* t){
 	node *current;
 	typename std::list<node* >::iterator it;
 
-	unsigned tx,ty, i;
+	unsigned tx,ty;
 	point **camefrom = matrix_path();
 
 	while(!v.empty()){
@@ -411,7 +411,7 @@ void cgraph<G>::hill_climbing(node *s, node *t){
 
 	H h;
 
-	unsigned tx,ty, i;
+	unsigned tx,ty;
 	point **camefrom = matrix_path();
 
 	while(!pq.empty()){
@@ -454,7 +454,7 @@ void cgraph<G>::first_better(node *s, node *t){
 
 	W g;
 
-	unsigned tx,ty, i;
+	unsigned tx,ty;
 	point **camefrom = matrix_path();
 
 	while(!pq.empty()){
