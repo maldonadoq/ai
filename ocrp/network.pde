@@ -1,6 +1,3 @@
-ArrayList connec = new ArrayList();
-ArrayList conStr = new ArrayList();
-
 class cnetwork{
     cneuron [] input_layer;
     cneuron [] hidden_layer;
@@ -43,8 +40,6 @@ class cnetwork{
     }
 
     void display(){
-        drawCon();
-
         // Draw the input layer
         for (int i = 0; i < input_layer.length; i++) {
             pushMatrix();
@@ -53,17 +48,7 @@ class cnetwork{
                 (i/14) * height / 20.0 + height * 0.13);
             input_layer[i].display();
             popMatrix();
-        }
-
-        // Draw the hidden layer
-        for (int j = 0; j < hidden_layer.length; j++) {
-            pushMatrix();
-            translate(
-                (j%7) * height / 20.0 + width * 0.53, 
-                (j/7) * height / 20.0 + height * 0.32);
-            hidden_layer[j].display();
-            popMatrix();
-        }
+        }        
 
         // Draw the output layer
         float [] resp = new float [output_layer.length];
@@ -115,30 +100,5 @@ class cnetwork{
         for (int j = 0; j < hidden_layer.length; j++) {
             hidden_layer[j].train();
         }
-    }
-
-    void drawCon() {
-        for (int i = 0; i < hidden_layer.length; i++) {
-            float [] res = hidden_layer[i].get_strength();
-            stroke(10);
-            strokeWeight(pow(10, res[1])/35);
-            line(
-                (i%7) * height / 20.0 + width * 0.53, 
-                (i/7) * height / 20.0 + height * 0.32, 
-                (int(res[0])%14) * height / 20.0 + width * 0.05, 
-                (int(res[0])/14) * height / 20.0 + height * 0.13);
-        }
-
-        for (int i = 0; i < output_layer.length; i++) {
-            float [] res = output_layer[i].get_strength();
-            stroke(res[1]*10);
-            strokeWeight(pow(10, res[1])/35);
-            line(
-                width * 0.85, 
-                (i%10) * height / 15.0 + height * 0.2,
-                (res[0]%7) * height / 20.0 + width * 0.53, 
-                (res[0]/7) * height / 20.0 + height * 0.32);
-        }
-        strokeWeight(1);
-    }
+    }    
 }

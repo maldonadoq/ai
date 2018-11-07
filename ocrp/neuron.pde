@@ -44,22 +44,8 @@ class cneuron{
     }
 
     void display(){
-        stroke(0);
+        stroke(200);
         fill(128*(1-output));
         ellipse(0,0,16,16);
-    }
-
-    float [] get_strength() {
-        float ind = 0.0;
-        float str = 0.0;
-        for(int i=0; i<weights.length; i++){
-            if(weights[i] > str){
-                ind = i; 
-                str = weights[i];
-            }
-        }
-        
-        float [] a = {ind, str};
-        return a;
-    }
+    }    
 }

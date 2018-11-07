@@ -16,7 +16,7 @@ public:
 
 class Compare{
 public:
-    bool operator()(Foo A, Foo B){    	
+    bool operator()(Foo A, Foo B){
         return A.x>B.x;
     }
 };

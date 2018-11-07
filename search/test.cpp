@@ -22,14 +22,14 @@ public:
 };
 
 template<class T, class V, class D>
-class node{	
-public:	
+class node{
+public:
 	T m_data;
 	bool m_v;
 	point<D> m_coord;
-	list<pair<node<T,V,D> *, V> > lady;	
+	list<pair<node<T,V,D> *, V> > lady;
 	D m_distance;
-	node(T _m_data){	this->m_data = _m_data;	}	
+	node(T _m_data){	this->m_data = _m_data;	}
 	node(T _m_data, point<D> _m_coord){
 		this->m_data = _m_data;
 		this->m_coord = _m_coord;
@@ -69,12 +69,12 @@ public:
 			if(this->vnode[i]->m_data == _d)	return this->vnode[i];
 		return NULL;
 	}
-	
+
 	void insert_node(T _d){	this->vnode.push_back(new node<T,V,D>(_d));	}
 	void insert_node(T _d, D _x, D _y){	this->vnode.push_back(new node<T,V,D>(_d, point<D>(_x,_y)));	}
-	
+
 	void insert_edge(T _a, T _b, V _v, bool _t){
-		node<T,V,D> *tma = find(_a);	
+		node<T,V,D> *tma = find(_a);
 		node<T,V,D> *tmb = find(_b);
 
 		if(tma == NULL or tmb == NULL)	return;
@@ -85,7 +85,7 @@ public:
 			tmb->set_ady(tma, _v);
 		}
 	}
-	
+
 	void print_edge(){
 		for(unsigned i=0; i<this->vnode.size(); i++)
 			cout << this->vnode[i]->m_data << ":\t" << *this->vnode[i] << endl;
@@ -112,16 +112,16 @@ public:
 			case 4: hill_climbing(_s, _t);
 				break;
 		}
-		cout << "\n";		
-	}	
+		cout << "\n";
+	}
 
 	void depth_search(node<T,V,D> *, node<T,V,D> *);
-	void breadth_search(node<T,V,D> *, node<T,V,D> *);	
+	void breadth_search(node<T,V,D> *, node<T,V,D> *);
 	void blind_point(node<T,V,D> *, node<T,V,D> *);
 	void hill_climbing(node<T,V,D> *, node<T,V,D> *);
 	void best_first(node<T,V,D> *, node<T,V,D> *);
 	void a_asterisk(node<T,V,D> *, node<T,V,D> *);
-	
+
 	~graph(){};
 };
 
@@ -135,7 +135,7 @@ void graph<T,V,D>::depth_search(node<T,V,D> * _s, node<T,V,D> * _t){
 	typename list<pair<node<T,V,D> *, V> >::iterator it;
 
 	while(!v.empty()){
-		tmp = v.top();				// use 		
+		tmp = v.top();				// use
 		v.pop();
 		cout << tmp->m_data << "\t";	// way
 		for(it=tmp->lady.begin(); it!=tmp->lady.end(); it++){
@@ -156,7 +156,7 @@ void graph<T,V,D>::breadth_search(node<T,V,D> * _s, node<T,V,D> * _t){
 	typename list<pair<node<T,V,D> *, V> >::iterator it;
 
 	while(!v.empty()){
-		tmp = v.front();				// use 
+		tmp = v.front();				// use
 		cout << tmp->m_data << "\t";	// way
 		for(it=tmp->lady.begin(); it!=tmp->lady.end(); it++){
 			if(!(*it).first->m_v){
@@ -180,16 +180,16 @@ void graph<T,V,D>::blind_point(node<T,V,D> * _s, node<T,V,D> * _t){
 
 	while(!v.empty()){
 		tmp = v.front();
-		v.pop_front();		
-		cout << tmp->m_data << "\t";	// way		
+		v.pop_front();
+		cout << tmp->m_data << "\t";	// way
 		for(it=tmp->lady.begin(); it!=tmp->lady.end(); it++){
 			if(!(*it).first->m_v){
-				(*it).first->m_v = true;		// visited			
+				(*it).first->m_v = true;		// visited
 				if(v.size()==0)	v.push_back((*it).first);
 				else{
 					r = rand()%v.size();
 					v.insert(next(v.begin(), r),(*it).first);
-				}				
+				}
 			}
 		}
 	}
@@ -210,8 +210,8 @@ void graph<T,V,D>::hill_climbing(node<T,V,D> *_s, node<T,V,D> *_t){
 		cout << tmp->m_data << "\t";	// way
 		for(it=tmp->lady.begin(); it!=tmp->lady.end(); it++){
 			if(!(*it).first->m_v){
-				(*it).first->m_v = true;		// visited			
-				pq.push((*it).first);				
+				(*it).first->m_v = true;		// visited
+				pq.push((*it).first);
 			}
 		}
 	}
@@ -248,7 +248,7 @@ int main(int argc, char const *argv[]){
 	a->search(source, target, 3);
 	a->search(source, target, 4);
 
-	delete source;	delete target;	delete a;	
+	delete source;	delete target;	delete a;
 	return 0;
 }
 
@@ -258,7 +258,7 @@ int main(int argc, char const *argv[]){
 		unsigned i,j,nr,nc;
 		nr = this->m_nrow-1;
 		nc = this->m_ncol-1;
-		
+
 		for(j=0; j<nc; j++){
 			this->m_vnodes[0][j]->add_edge(this->m_vnodes[0][j+1]);
 			this->m_vnodes[nr][j]->add_edge(this->m_vnodes[nr][j+1]);
@@ -284,7 +284,7 @@ int main(int argc, char const *argv[]){
 				this->m_vnodes[i][j]->add_edge(this->m_vnodes[i+1][j-1]);
 				this->m_vnodes[i][j]->add_edge(this->m_vnodes[i+1][j]);
 				this->m_vnodes[i][j]->add_edge(this->m_vnodes[i+1][j+1]);
-			}			
+			}
 		}
 	}
 */

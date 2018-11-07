@@ -21,8 +21,7 @@ void setup(){
 }
 
 void draw(){
-    // background(0,100,100);
-    background(200);
+    background(250);
     neuralnet.display();
 
     fill(100);

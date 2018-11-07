@@ -9,12 +9,12 @@ class cbutton{
     }
 
     void display(){
-        if(hover()) fill(0,25,0);
+        if(hover()) fill(220);
         else noFill();
         
-        stroke(0);
+        stroke(150);
         ellipse(pos.x, pos.y, radius*2, radius*2);
-        fill(0);
+        fill(150);
         text(name, pos.x-13, pos.y+4);
     }
 
