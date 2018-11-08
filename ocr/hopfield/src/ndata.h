@@ -1,6 +1,14 @@
 #ifndef _NDATA_H_
 #define _NDATA_H_
 
+#include <vector>
+
+void string_to_vector(std::vector<int> &ntmp, const std::string stmp){
+	unsigned j;
+	for(j=0; j<stmp.size(); j++)
+		ntmp.push_back((stmp[j]=='.')? -1: 1);
+}
+
 class ndata{
 public:
 	std::vector<std::vector<int> > correct;
@@ -16,17 +24,22 @@ public:
 		if(!tfile.is_open())
 			return false;
 
-		getline(tfile, stmp);		
+		//getline(tfile, stmp);
+
+		std::string line;
+	    while(getline(tfile, line)){
+	        stmp += line;
+	    }
+	    
 		boost::split(vtmp,stmp,boost::is_any_of("|"));
-		unsigned i,j;
+		unsigned i;
 		std::vector<int> ntmp;
 
 		for(i=0; i<vtmp.size(); i++){
 			stmp = vtmp[i];
-			for(j=0; j<stmp.size(); j++)
-				ntmp.push_back((stmp[j]=='0')? -1: 1);
-			correct.push_back(ntmp);
 			ntmp.clear();
+			string_to_vector(ntmp, stmp);
+			correct.push_back(ntmp);			
 		}
 
 		return true;
