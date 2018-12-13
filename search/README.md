@@ -11,4 +11,4 @@ Visualization of paths from different search methods.
  * $ cd folder
  * $ g++ -std=c++11 graph.cpp -o graph.out -lGL -lGLU -lglut
 
-[![Alt text](https://img.youtube.com/vi/cDVDsN7CJZw/0.jpg)](https://www.youtube.com/watch?v=cDVDsN7CJZw)
+[![Alt text](https://img.youtube.com/vi/-vcHgJqSEnk/0.jpg)](https://www.youtube.com/watch?v=-vcHgJqSEnk)
