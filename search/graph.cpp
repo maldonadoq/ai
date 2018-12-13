@@ -25,9 +25,9 @@ typedef cgraph<box>						graph;	// graph
 
 graph *tmp;								// graph
 
-double row_size = 500;					// screen row size
-double col_size = 1000;					// screen col size
-double unit_size = 20;					// unit min
+double row_size = 400;					// screen row size
+double col_size = 800;					// screen col size
+double unit_size = 25;					// unit min
 
 double ts = 20;
 
@@ -54,7 +54,7 @@ void gldraw(){
             glVertex2d(vpoints[i].first,vpoints[i].second);
     glEnd();
 
-	if(state_edge){
+	if(state_edge){        
 	    glLineWidth(1);    
 	    glBegin(GL_LINES);
 			for(unsigned i=0; i<vlines.size(); i+=2){
@@ -65,7 +65,7 @@ void gldraw(){
 		glEnd();
 	}
 
-    if(state_source){
+    if(state_source){        
         glPointSize(5);
         glBegin(GL_POINTS);
             glColor3d(255,255,255);
@@ -191,50 +191,60 @@ GLvoid window_key(unsigned char key, int x, int y) {
             exit(0);
             break;
         case KEY_E:
+            std::cout << " KEY_E: show edges!\n";
         	if(state_edge){		state_edge = false;   }
         	else{	state_edge = true;   }
         	break;        
-        case KEY_R:        	
+        case KEY_R:
+            std::cout << " KEY_R: rectangle [drop]!\n";        
         	tmp->remove_node_in(minr, maxr);
-        	// std::cout << minr << "\t" << maxr << "\n";
         	break;
         case KEY_S:{
+            std::cout << " KEY_S source!\n";
             if(!state_resize){
                 state_resize = true;
                 node_source = tmp->near_to(minr);
-                std::cout << node_source->m_data << "\n";
+                // std::cout << node_source->m_data << "\n";
                 state_source = true;
             }            
             break;
         }
         case KEY_T:{
+            std::cout << " KEY_T target!\n";
             if(!state_resize){
                 state_resize = true;
                 node_target = tmp->near_to(minr);
-                std::cout << node_target->m_data << "\n";
+                // std::cout << node_target->m_data << "\n";
                 state_target = true;
             }            
             break;
         }
         case KEY_A:
+            std::cout << " KEY_A A*!\n";
             tmp->a_asterisk(node_source, node_target);
             break;
         case KEY_D:
+            std::cout << " KEY_D Depth search!\n";
             tmp->depth_search(node_source, node_target);
             break;
         case KEY_B:
+            std::cout << " KEY_B Breadth search!\n";
             tmp->breadth_search(node_source, node_target);
             break;
         case KEY_H:
+            std::cout << " KEY_H Hill climbing!\n";
             tmp->hill_climbing(node_source, node_target);
             break;
         case KEY_F:
+            std::cout << " KEY_F First better!\n";
             tmp->first_better(node_source, node_target);
             break;
         case KEY_W:
+            std::cout << " KEY_W Blind search!\n";
             tmp->blind_search(node_source, node_target);
             break;
         case KEY_C:            
+            std::cout << " KEY_C Clear!\n";
             vpatha.clear();
             vpathd.clear();
             vpathb.clear();
