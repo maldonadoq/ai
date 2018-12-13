@@ -123,7 +123,7 @@ void hopfield::asynchronous_correction(){
 
 		if(next_iteration(rand()%this->points)){
 			lit = it;
-		}
+		}	
 	} while((it-lit)<(int)(10*this->points));
 }
 
