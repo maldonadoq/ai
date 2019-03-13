@@ -10,6 +10,8 @@ cbutton trainB, testB;
 
 void setup(){
     size(600, 400);
+    frame.setTitle("Perceptron OCR");
+
     setup_sigmoid();
     load_data();
     neuralnet = new cnetwork(196, 49, 10);

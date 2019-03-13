@@ -9,7 +9,7 @@
 
 int main(int argc, char const *argv[]){
 	std::string strain = "data/1train.dat";
-	std::string stest = "data/1test.dat";	
+	std::string stest = "data/1test.dat";
 
 	dtable train;
 	train.load_from_csv(strain);
